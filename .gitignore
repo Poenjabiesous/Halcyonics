@@ -1,0 +1,31 @@
+# Created by .gitignore support plugin (hsz.mobi)
+### Gradle template
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Mod/Forge related stuff
+libs
+eclipse
+*.iws
+*.ipr
+*.iml
+.classpath
+.project
+.settings
+.idea
+bin
+logs
+saves
+run
+blueprints
+config
+crash-reports
+mods
+libs
+
+# Other Stuff
+Thumbs.db
+*.json

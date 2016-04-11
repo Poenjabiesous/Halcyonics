@@ -10,9 +10,9 @@ import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
-public class ItemBlockColliderBlockRedstonePort extends ItemBlock {
+public class ItemBlockRedstonePort extends ItemBlock {
 
-    public ItemBlockColliderBlockRedstonePort(Block p_i45328_1_) {
+    public ItemBlockRedstonePort(Block p_i45328_1_) {
         super(p_i45328_1_);
     }
 

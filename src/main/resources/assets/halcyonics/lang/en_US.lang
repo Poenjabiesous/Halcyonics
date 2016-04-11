@@ -17,7 +17,7 @@ colliderblockglass.info=General building block of the Auraic Collider multiblock
 colliderblockcontroller.info=Controller of the Auraic Collider multiblock structure.
 colliderblockenergyport.info=Used to extract RF/EU out of the Auraic Collider.
 colliderblockcolliderport.info.1=Each of these blocks in the Auraic Collider multiblock structure
-colliderblockcolliderport.info.2=adds power generation per tick, at the cost of less stability.
+colliderblockcolliderport.info.2=adds power generation per tick, at the cost of vis.
 colliderblockredstoneport.info=Used to turn the Auraic Collider on/off with a redstone signal.
 
 block.usablility=Block Usability

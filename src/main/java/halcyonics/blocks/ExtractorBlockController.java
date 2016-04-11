@@ -1,6 +1,6 @@
 package halcyonics.blocks;
 
-
+import halcyonics.enums.MultiBlockEnum;
 import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
 import halcyonics.tileEntity.ColliderBlockControllerTileEntity;
 import net.minecraft.block.state.IBlockState;
@@ -10,14 +10,13 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import halcyonics.enums.MultiBlockEnum;
 
 /**
  * Created by Niel on 3/21/2016.
  */
-public class ColliderBlockController extends AbstractMultiBlockTileEntityContainer {
+public class ExtractorBlockController extends AbstractMultiBlockTileEntityContainer {
 
-    public ColliderBlockController(String unlocalisedName) {
+    public ExtractorBlockController(String unlocalisedName) {
         super(unlocalisedName);
     }
 
@@ -46,7 +45,6 @@ public class ColliderBlockController extends AbstractMultiBlockTileEntityContain
             playerIn.addChatComponentMessage(new ChatComponentText("Last structure error: " + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getReactor().getLastErrorMessage()));
         } else {
             playerIn.addChatComponentMessage(new ChatComponentText("---Collider Overview---"));
-            playerIn.addChatComponentMessage(new ChatComponentText(""));
             playerIn.addChatComponentMessage(new ChatComponentText("Energy: " + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getEnergyStored() + "/" + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getMaxEnergyStored()));
             playerIn.addChatComponentMessage(new ChatComponentText(""));
 
@@ -55,15 +53,9 @@ public class ColliderBlockController extends AbstractMultiBlockTileEntityContain
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-
-        if(worldIn.getTileEntity(pos) instanceof ColliderBlockControllerTileEntity)
-        {
-            ((ColliderBlockControllerTileEntity)worldIn.getTileEntity(pos)).deconstructMultiBlock();
-        }
-        super.breakBlock(worldIn, pos, state);
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        super.breakBlock(world, pos, state);
     }
-
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {

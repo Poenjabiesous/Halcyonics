@@ -97,11 +97,10 @@ public abstract class AbstractMultiBlock extends Block {
 
     @Override
     public boolean canRenderInLayer(EnumWorldBlockLayer layer) {
-        if (layer == EnumWorldBlockLayer.TRANSLUCENT) {
+        if (layer == EnumWorldBlockLayer.SOLID) {
             return true;
         }
         return false;
     }
-
 }
 

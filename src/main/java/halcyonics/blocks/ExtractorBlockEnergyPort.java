@@ -1,26 +1,16 @@
 package halcyonics.blocks;
 
-import halcyonics.multiblock.AbstractMultiBlockNeighborAwareAirAlign;
 import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
-import halcyonics.tileEntity.RedstonePortTileEntity;
+import halcyonics.tileEntity.MultiBlockEnergyOutputTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 /**
  * Created by Niel on 3/21/2016.
  */
-public class ColliderBlockRedstonePort extends AbstractMultiBlockTileEntityContainer {
-    public ColliderBlockRedstonePort(String unlocalisedName) {
+public class ExtractorBlockEnergyPort extends AbstractMultiBlockTileEntityContainer {
+    public ExtractorBlockEnergyPort(String unlocalisedName) {
         super(unlocalisedName);
-    }
-
-    @Override
-    public boolean canRenderInLayer(EnumWorldBlockLayer layer) {
-        if (layer == EnumWorldBlockLayer.SOLID) {
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -40,6 +30,6 @@ public class ColliderBlockRedstonePort extends AbstractMultiBlockTileEntityConta
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new RedstonePortTileEntity();
+        return new MultiBlockEnergyOutputTileEntity();
     }
 }

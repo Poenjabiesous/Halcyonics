@@ -2,31 +2,18 @@ package halcyonics.blocks;
 
 import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
 import halcyonics.tileEntity.ColliderBlockColliderPortTileEntity;
-import net.minecraft.block.BlockEndPortal;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 /**
  * Created by Niel on 3/21/2016.
  */
-public class ColliderBlockColliderPort extends AbstractMultiBlockTileEntityContainer {
+public class ExtractorBlockDisplacementPort extends AbstractMultiBlockTileEntityContainer {
 
-    public ColliderBlockColliderPort(String unlocalisedName) {
+    public ExtractorBlockDisplacementPort(String unlocalisedName) {
         super(unlocalisedName);
     }
-
-    @Override
-    public boolean canRenderInLayer(EnumWorldBlockLayer layer) {
-        if (layer == EnumWorldBlockLayer.CUTOUT) {
-            return true;
-        }
-        if (layer == EnumWorldBlockLayer.TRANSLUCENT) {
-            return true;
-        }
-        return false;
-    }
-
 
     @Override
     public boolean isValidForFrame() {

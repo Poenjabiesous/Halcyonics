@@ -17,6 +17,10 @@ public abstract class SlaveMultiBlockTileEntity extends TileEntity {
         return (oldState.getBlock() != newState.getBlock());
     }
 
+    public ColliderBlockControllerTileEntity getMaster() {
+        return master;
+    }
+
     public void setMaster(ColliderBlockControllerTileEntity master) {
         this.master = master;
     }

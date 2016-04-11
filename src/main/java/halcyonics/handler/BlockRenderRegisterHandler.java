@@ -36,8 +36,8 @@ public class BlockRenderRegisterHandler {
         ModelBakery.registerItemVariants(Item.getItemFromBlock(BlocksHandler.colliderBlockColliderPort), new ResourceLocation(ModInfo.ID + ":" + Names.unlocalisedColliderBlockColliderPort + "_" + MultiBlockEnum.EnumType.UNFORMED));
         reg(BlocksHandler.colliderBlockColliderPort, 0, Names.unlocalisedColliderBlockColliderPort + "_" + MultiBlockEnum.EnumType.UNFORMED);
 
-        ModelBakery.registerItemVariants(Item.getItemFromBlock(BlocksHandler.colliderBlockRedstonePort), new ResourceLocation(ModInfo.ID + ":" + Names.unlocalisedColliderBlockRedstonePort + "_" + MultiBlockEnum.EnumType.UNFORMED));
-        reg(BlocksHandler.colliderBlockRedstonePort, 0, Names.unlocalisedColliderBlockRedstonePort + "_" + MultiBlockEnum.EnumType.UNFORMED);
+        ModelBakery.registerItemVariants(Item.getItemFromBlock(BlocksHandler.blockRedstonePort), new ResourceLocation(ModInfo.ID + ":" + Names.unlocalisedblockRedstonePort + "_" + MultiBlockEnum.EnumType.UNFORMED));
+        reg(BlocksHandler.blockRedstonePort, 0, Names.unlocalisedblockRedstonePort + "_" + MultiBlockEnum.EnumType.UNFORMED);
     }
 
     public static void reg(Block block, int meta, String file) {

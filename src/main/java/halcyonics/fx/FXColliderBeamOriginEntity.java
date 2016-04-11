@@ -11,15 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-public class FXColliderCoreEntity extends EntityFX {
+public class FXColliderBeamOriginEntity extends EntityFX {
 
-    ResourceLocation event0 = new ResourceLocation("halcyonics", "textures/entity/reactorEvent0.png");
-    ResourceLocation event1 = new ResourceLocation("halcyonics", "textures/entity/reactorEvent1.png");
-    ResourceLocation event2 = new ResourceLocation("halcyonics", "textures/entity/reactorEvent2.png");
-    ResourceLocation event3 = new ResourceLocation("halcyonics", "textures/entity/reactorEvent3.png");
-    ResourceLocation event4 = new ResourceLocation("halcyonics", "textures/entity/reactorEvent4.png");
-    ResourceLocation event5 = new ResourceLocation("halcyonics", "textures/entity/reactorEvent5.png");
-    ResourceLocation usable = null;
+    ResourceLocation resourceLocation = new ResourceLocation("halcyonics", "textures/entity/beamOrigin.png");
 
     int rotation = 0;
     float sx = 0.5F;
@@ -29,57 +23,30 @@ public class FXColliderCoreEntity extends EntityFX {
     float rotationZ = 0.0F;
     float rotationY = 0.0F;
 
-    public FXColliderCoreEntity(World world, double d, double d1, double d2, float scale) {
+    public FXColliderBeamOriginEntity(World world, double d, double d1, double d2) {
         super(world, d, d1, d2, 0.0D, 0.0D, 0.0D);
         this.particleGravity = 0.0F;
         this.motionX = this.motionY = this.motionZ = 0.0D;
         this.particleMaxAge = 12 + this.rand.nextInt(5);
         this.noClip = false;
-        this.setSize(scale, scale);
+        this.setSize(1.0F, 1.0F);
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         this.noClip = true;
-        this.particleScale = scale;
+        this.particleScale = 1.0F;
         this.rotation = this.rand.nextInt(360);
         this.sx = MathHelper.clamp_float(0.0F - 0.6F + this.rand.nextFloat() * 0.2F, -0.4F, 0.4F);
         this.sy = MathHelper.clamp_float(0.0F - 0.6F + this.rand.nextFloat() * 0.2F, -0.4F, 0.4F);
         this.sz = MathHelper.clamp_float(0.0F - 0.6F + this.rand.nextFloat() * 0.2F, -0.4F, 0.4F);
-        this.particleMaxAge = 5;
+        this.particleMaxAge = 20;
 
-        int ran = rand.nextInt(6);
-        switch (ran) {
-            case 0: {
-                usable = event0;
-                break;
-            }
-            case 1: {
-                usable = event1;
-                break;
-            }
-            case 2: {
-                usable = event2;
-                break;
-            }
-            case 3: {
-                usable = event3;
-                break;
-            }
-            case 4: {
-                usable = event4;
-                break;
-            }
-            case 5: {
-                usable = event5;
-                break;
-            }
-        }
     }
 
     public void renderParticle(WorldRenderer wr, Entity p_180434_2_, float f, float f1, float f2, float f3, float f4, float f5) {
         Tessellator.getInstance().draw();
         GL11.glPushMatrix();
-        Minecraft.getMinecraft().renderEngine.bindTexture(usable);
+        Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
         GL11.glDepthMask(false);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -104,14 +71,14 @@ public class FXColliderCoreEntity extends EntityFX {
         wr.pos(-0.5D * (double) var12, -0.5D * (double) var12, 0.0D).tex(0.0D, 0.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
 
         GL11.glRotatef(90.0F, rotationX, rotationY, rotationZ);
-        GL11.glRotatef((float) this.rotation, 1.0F, 0.0F, 1.0F);
+        GL11.glRotatef((float) this.rotation, 1.0F, 0.0F, 0.0F);
         wr.pos(-0.5D * (double) var12, 0.5D * (double) var12, 0.0D).tex(0.0D, 1.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
         wr.pos(0.5D * (double) var12, 0.5D * (double) var12, 0.0D).tex(1.0D, 1.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
         wr.pos(0.5D * (double) var12, -0.5D * (double) var12, 0.0D).tex(1.0D, 0.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
         wr.pos(-0.5D * (double) var12, -0.5D * (double) var12, 0.0D).tex(0.0D, 0.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
 
         GL11.glRotatef(90.0F, rotationX, rotationY, rotationZ);
-        GL11.glRotatef((float) this.rotation, 1.0F, 1.0F, 1.0F);
+        GL11.glRotatef((float) this.rotation, 0.0F, 1.0F, 0.0F);
         wr.pos(-0.5D * (double) var12, 0.5D * (double) var12, 0.0D).tex(0.0D, 1.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
         wr.pos(0.5D * (double) var12, 0.5D * (double) var12, 0.0D).tex(1.0D, 1.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
         wr.pos(0.5D * (double) var12, -0.5D * (double) var12, 0.0D).tex(1.0D, 0.0D).color(this.particleRed * var16, this.particleGreen * var16, this.particleBlue * var16, this.particleAlpha * 2.0F).lightmap(j, k).endVertex();
@@ -129,7 +96,7 @@ public class FXColliderCoreEntity extends EntityFX {
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
-        this.particleScale = particleScale + 0.5F;
+
         float threshold = (float) this.particleMaxAge / 5.0F;
         if ((float) this.particleAge <= threshold) {
             this.particleAlpha = (float) this.particleAge / threshold;

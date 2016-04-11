@@ -1,10 +1,8 @@
 package halcyonics.thaumref;
 
 import halcyonics.handler.BlocksHandler;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.blocks.BlocksTC;
@@ -29,7 +27,9 @@ public class ThaumResearch {
                 new ItemStack(BlocksTC.stone, 1, 1), 'B', new ItemStack(ItemsTC.shard, 1, 5)));
 
 
-        page.type = ResearchPage.PageType.ARCANE_CRAFTING;
+        page.type = ResearchPage.PageType.TEXT;
+        page.text = "HELLO";
+        page.research = "AURAIC_COLLIDER";
         page.image = new ResourceLocation("halcyonics", "textures/tc/halcyonics.png");
         item.setPages(page);
 

@@ -36,9 +36,9 @@ public class FXAuraBeamEntity extends EntityFX {
     public int impact;
 
     ResourceLocation beam = new ResourceLocation("halcyonics", "textures/entity/beam.png");
+
     public FXAuraBeamEntity(World par1World, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
         super(par1World, fromX, fromY, fromZ, 0.0D, 0.0D, 0.0D);
-        this.setSize(1.00F, 1.00F);
         this.noClip = true;
         this.motionX = 0.0D;
         this.motionY = 0.0D;
@@ -48,8 +48,8 @@ public class FXAuraBeamEntity extends EntityFX {
         this.toZ = toZ;
         this.prevYaw = this.rotYaw;
         this.prevPitch = this.rotPitch;
-        this.particleMaxAge = 5;
-        this.particleScale = 1.0F;
+        this.particleMaxAge = 10;
+        this.particleScale = 0.2F;
 
         Entity renderentity = FMLClientHandler.instance().getClient().getRenderViewEntity();
         byte visibleDistance = 42;
@@ -94,13 +94,13 @@ public class FXAuraBeamEntity extends EntityFX {
         float var9 = 1.0F;
         float slide = (float) Minecraft.getMinecraft().thePlayer.ticksExisted;
         float rot = (float) (this.worldObj.provider.getWorldTime() % (long) (360 / this.rotationspeed) * (long) this.rotationspeed) + (float) this.rotationspeed * f;
-        float size = 1.0F;
+        float size = 0.01F;
         if (this.pulse) {
             size = Math.min((float) this.particleAge / 4.0F, 1.0F);
             size = (float) ((double) this.prevSize + (double) (size - this.prevSize) * (double) f);
         }
 
-        float op = 0.4F;
+        float op = 0.1F;
         if (this.pulse && this.particleMaxAge - this.particleAge <= 4) {
             op = 0.4F - (float) (4 - (this.particleMaxAge - this.particleAge)) * 0.1F;
         }
@@ -118,7 +118,7 @@ public class FXAuraBeamEntity extends EntityFX {
 
         float var12 = -var11 * 0.2F - (float) MathHelper.floor_float(-var11 * 0.1F);
         GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 1);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         GL11.glDepthMask(false);
         float xx = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) f - interpPosX);
         float yy = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) f - interpPosY);
@@ -146,10 +146,10 @@ public class FXAuraBeamEntity extends EntityFX {
             double var37 = (double) (this.length * size * var9) + var35;
             GL11.glRotatef(60.0F, 0.0F, 1.0F, 0.0F);
             wr.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-            wr.pos(var44b, var29, 0.0D).tex(var33, var37).color(this.particleRed, this.particleGreen, this.particleBlue, op).lightmap(j, k).endVertex();
-            wr.pos(var44, 0.0D, 0.0D).tex(var33, var35).color(this.particleRed, this.particleGreen, this.particleBlue, op).lightmap(j, k).endVertex();
-            wr.pos(var17, 0.0D, 0.0D).tex(var31, var35).color(this.particleRed, this.particleGreen, this.particleBlue, op).lightmap(j, k).endVertex();
-            wr.pos(var17b, var29, 0.0D).tex(var31, var37).color(this.particleRed, this.particleGreen, this.particleBlue, op).lightmap(j, k).endVertex();
+            wr.pos(var44b, var29, 0.0D).tex(var33, var37).color(this.particleRed, this.particleGreen, this.particleBlue, op/3).lightmap(j, k).endVertex();
+            wr.pos(var44, 0.0D, 0.0D).tex(var33, var35).color(this.particleRed, this.particleGreen, this.particleBlue, op/3).lightmap(j, k).endVertex();
+            wr.pos(var17, 0.0D, 0.0D).tex(var31, var35).color(this.particleRed, this.particleGreen, this.particleBlue, op/3).lightmap(j, k).endVertex();
+            wr.pos(var17b, var29, 0.0D).tex(var31, var37).color(this.particleRed, this.particleGreen, this.particleBlue, op/3).lightmap(j, k).endVertex();
             Tessellator.getInstance().draw();
         }
 
@@ -159,41 +159,8 @@ public class FXAuraBeamEntity extends EntityFX {
         GL11.glDisable(3042);
         GL11.glEnable(2884);
         GL11.glPopMatrix();
-        if (this.impact > 0) {
-            this.renderImpact(Tessellator.getInstance(), f, f1, f2, f3, f4, f5);
-        }
 
-        wr.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+        wr.begin(7, DefaultVertexFormats.POSITION_NORMAL);
         this.prevSize = size;
-    }
-
-    public void renderImpact(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
-        GL11.glPushMatrix();
-        GL11.glDepthMask(false);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 1);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.66F);
-        int part = this.particleAge % 16;
-        float var8 = (float) part / 16.0F;
-        float var9 = var8 + 0.0624375F;
-        float var10 = 0.3125F;
-        float var11 = var10 + 0.0624375F;
-        float var12 = this.endMod / 2.0F / (float) (6 - this.impact);
-        float var13 = (float) (this.ptX + (this.toX - this.ptX) * (double) f - interpPosX);
-        float var14 = (float) (this.ptY + (this.toY - this.ptY) * (double) f - interpPosY);
-        float var15 = (float) (this.ptZ + (this.toZ - this.ptZ) * (double) f - interpPosZ);
-        short i = 200;
-        int j = i >> 16 & '\uffff';
-        int k = i & '\uffff';
-        tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        tessellator.getWorldRenderer().pos((double) (var13 - f1 * var12 - f4 * var12), (double) (var14 - f2 * var12), (double) (var15 - f3 * var12 - f5 * var12)).tex((double) var9, (double) var11).color(this.particleRed, this.particleGreen, this.particleBlue, 0.66F).lightmap(j, k).endVertex();
-        tessellator.getWorldRenderer().pos((double) (var13 - f1 * var12 + f4 * var12), (double) (var14 + f2 * var12), (double) (var15 - f3 * var12 + f5 * var12)).tex((double) var9, (double) var10).color(this.particleRed, this.particleGreen, this.particleBlue, 0.66F).lightmap(j, k).endVertex();
-        tessellator.getWorldRenderer().pos((double) (var13 + f1 * var12 + f4 * var12), (double) (var14 + f2 * var12), (double) (var15 + f3 * var12 + f5 * var12)).tex((double) var8, (double) var10).color(this.particleRed, this.particleGreen, this.particleBlue, 0.66F).lightmap(j, k).endVertex();
-        tessellator.getWorldRenderer().pos((double) (var13 + f1 * var12 - f4 * var12), (double) (var14 - f2 * var12), (double) (var15 + f3 * var12 - f5 * var12)).tex((double) var8, (double) var11).color(this.particleRed, this.particleGreen, this.particleBlue, 0.66F).lightmap(j, k).endVertex();
-        tessellator.draw();
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(3042);
-        GL11.glDepthMask(true);
-        GL11.glPopMatrix();
     }
 }

@@ -2,7 +2,7 @@ package halcyonics.util;
 
 import com.google.common.collect.Lists;
 import halcyonics.tileEntity.ColliderBlockControllerTileEntity;
-import halcyonics.tileEntity.MultiBlockEnergyTileEntity;
+import halcyonics.tileEntity.MultiBlockEnergyOutputTileEntity;
 import halcyonics.tileEntity.SlaveMultiBlockTileEntity;
 import net.minecraft.block.BlockAir;
 import net.minecraft.tileentity.TileEntity;
@@ -60,10 +60,6 @@ public class MultiBlockStructureUtil {
 
         for (BlockPos block : reactorBlocksWithAir) {
 
-            if (world.getBlockState(block).getBlock() instanceof BlockAir) {
-                reactorBlocks.remove(block);
-            }
-
             if (isFrame(minPos, maxPos, block)) {
                 if ((world.getBlockState(block).getBlock() instanceof AbstractMultiBlock) && ((AbstractMultiBlock) world.getBlockState(block).getBlock()).isValidForFrame()) {
                     continue;
@@ -96,6 +92,10 @@ public class MultiBlockStructureUtil {
                     return structureDTO;
                 }
             }
+
+            if (world.getBlockState(block).getBlock() instanceof BlockAir) {
+                reactorBlocks.remove(block);
+            }
         }
 
         HashMap<BlockPos, TileEntity> reactorTileEntities = new HashMap<>();
@@ -106,7 +106,7 @@ public class MultiBlockStructureUtil {
                 reactorTileEntities.put(block, world.getTileEntity(block));
             }
 
-            if (world.getTileEntity(block) instanceof MultiBlockEnergyTileEntity) {
+            if (world.getTileEntity(block) instanceof MultiBlockEnergyOutputTileEntity) {
                 energyPorts++;
             }
         }
@@ -164,7 +164,7 @@ public class MultiBlockStructureUtil {
                     world.setBlockState(block, world.getBlockState(block).getBlock().getStateFromMeta(1), 2);
                 }
 
-                if (world.getTileEntity(block) instanceof MultiBlockEnergyTileEntity) {
+                if (world.getTileEntity(block) instanceof MultiBlockEnergyOutputTileEntity) {
                     world.getTileEntity(block).validate();
                 }
 
@@ -180,7 +180,7 @@ public class MultiBlockStructureUtil {
                     ((SlaveMultiBlockTileEntity) world.getTileEntity(block)).setMaster(null);
                 }
 
-                if (world.getTileEntity(block) instanceof MultiBlockEnergyTileEntity) {
+                if (world.getTileEntity(block) instanceof MultiBlockEnergyOutputTileEntity) {
                     world.getTileEntity(block).invalidate();
                 }
 
@@ -200,7 +200,7 @@ public class MultiBlockStructureUtil {
             return true;
         }
 
-        if (y == to.getY() || y == to.getY()) {
+        if (y == from.getY() || y == to.getY()) {
             return true;
         }
 
@@ -211,9 +211,19 @@ public class MultiBlockStructureUtil {
     }
 
     public static boolean isFrame(BlockPos from, BlockPos to, BlockPos block) {
+
         int x = block.getX();
         int y = block.getY();
         int z = block.getZ();
+
+
+        if (x == from.getX() && y == from.getY() && z == from.getZ()) {
+            return true;
+        }
+
+        if (x == to.getX() && y == to.getY() && z == to.getZ()) {
+            return true;
+        }
 
         if (x == from.getX() && y == from.getY()) {
             return true;
@@ -259,17 +269,7 @@ public class MultiBlockStructureUtil {
             return true;
         }
 
-        if (y == to.getY() && z == from.getZ()) {
-            return true;
-        }
+        return y == to.getY() && z == from.getZ();
 
-        if (x == from.getX() && y == from.getY() && z == from.getZ()) {
-            return true;
-        }
-
-        if (x == to.getX() && y == to.getY() && z == to.getZ()) {
-            return true;
-        }
-        return false;
     }
 }

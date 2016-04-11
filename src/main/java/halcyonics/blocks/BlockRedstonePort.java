@@ -1,16 +1,16 @@
 package halcyonics.blocks;
 
-import halcyonics.multiblock.AbstractMultiBlockNeighborAware;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
+import halcyonics.tileEntity.RedstonePortTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 /**
  * Created by Niel on 3/21/2016.
  */
-public class ColliderBlock extends AbstractMultiBlockNeighborAware {
-    public ColliderBlock(String unlocalisedName) {
+public class BlockRedstonePort extends AbstractMultiBlockTileEntityContainer {
+    public BlockRedstonePort(String unlocalisedName) {
         super(unlocalisedName);
     }
 
@@ -19,14 +19,12 @@ public class ColliderBlock extends AbstractMultiBlockNeighborAware {
         if (layer == EnumWorldBlockLayer.SOLID) {
             return true;
         }
-
         return false;
     }
 
-
     @Override
     public boolean isValidForFrame() {
-        return true;
+        return false;
     }
 
     @Override
@@ -37,5 +35,11 @@ public class ColliderBlock extends AbstractMultiBlockNeighborAware {
     @Override
     public boolean isValidForContent() {
         return false;
+    }
+
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new RedstonePortTileEntity();
     }
 }

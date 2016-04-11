@@ -1,9 +1,9 @@
 package halcyonics.blocks;
 
 import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
+import halcyonics.tileEntity.MultiBlockEnergyOutputTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import halcyonics.tileEntity.MultiBlockEnergyTileEntity;
 
 /**
  * Created by Niel on 3/21/2016.
@@ -12,6 +12,7 @@ public class ColliderBlockEnergyPort extends AbstractMultiBlockTileEntityContain
     public ColliderBlockEnergyPort(String unlocalisedName) {
         super(unlocalisedName);
     }
+
 
     @Override
     public boolean isValidForFrame() {
@@ -30,6 +31,6 @@ public class ColliderBlockEnergyPort extends AbstractMultiBlockTileEntityContain
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new MultiBlockEnergyTileEntity();
+        return new MultiBlockEnergyOutputTileEntity();
     }
 }

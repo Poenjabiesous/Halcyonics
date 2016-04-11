@@ -12,7 +12,7 @@ import halcyonics.handler.ConfigHandler;
 /**
  * Created by Niel on 4/3/2016.
  */
-public class MultiBlockEnergyTileEntity extends SlaveMultiBlockTileEntity implements IEnergyProvider, IEnergySource, IEnergyTile {
+public class MultiBlockEnergyOutputTileEntity extends SlaveMultiBlockTileEntity implements IEnergyProvider, IEnergySource {
 
 
     @Override
@@ -22,7 +22,7 @@ public class MultiBlockEnergyTileEntity extends SlaveMultiBlockTileEntity implem
             return 0;
         }
 
-        return master.extractEnergy(from, maxExtract, false);
+        return master.extractEnergy(maxExtract, false);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class MultiBlockEnergyTileEntity extends SlaveMultiBlockTileEntity implem
             return 0;
         }
 
-        return master.getEnergyStored(EnumFacing.NORTH);
+        return master.getEnergyStored();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class MultiBlockEnergyTileEntity extends SlaveMultiBlockTileEntity implem
             return 0;
         }
 
-        return master.getMaxEnergyStored(EnumFacing.NORTH);
+        return master.getMaxEnergyStored();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class MultiBlockEnergyTileEntity extends SlaveMultiBlockTileEntity implem
     @Override
     public void drawEnergy(double amount) {
 
-        master.extractEnergy(EnumFacing.NORTH, (int) (amount * ConfigHandler.getEuPowerConversionRatio()), false);
+        master.extractEnergy((int) (amount / ConfigHandler.getEuPowerConversionRatio()), false);
     }
 
     @Override

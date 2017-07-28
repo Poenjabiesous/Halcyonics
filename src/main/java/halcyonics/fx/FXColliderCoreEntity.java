@@ -140,11 +140,6 @@ public class FXColliderCoreEntity extends EntityFX {
         if (this.particleAge++ >= this.particleMaxAge) {
             this.setDead();
         }
-
-        this.motionY -= 0.04D * (double) this.particleGravity;
-        this.posX += this.motionX;
-        this.posY += this.motionY;
-        this.posZ += this.motionZ;
         this.rotationX = rotationX + 0.1F;
         this.rotationZ = rotationZ + 0.1F;
         this.rotationY = rotationZ + 0.1F;

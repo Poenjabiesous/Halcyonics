@@ -24,4 +24,6 @@ public abstract class SlaveMultiBlockTileEntity extends TileEntity {
     public void setMaster(ColliderBlockControllerTileEntity master) {
         this.master = master;
     }
+
+    public abstract void operate();
 }

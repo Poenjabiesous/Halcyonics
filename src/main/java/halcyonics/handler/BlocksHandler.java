@@ -15,12 +15,6 @@ public class BlocksHandler {
     public static Block colliderBlockEnergyPort;
     public static Block colliderBlockColliderPort;
 
-    public static Block extractorBlock;
-    public static Block extractorBlockGlass;
-    public static Block extractorBlockController;
-    public static Block extractorBlockEnergyPort;
-    public static Block extractorBlockDisplacementPort;
-
     public static Block blockRedstonePort;
 
     public static void init() {
@@ -38,23 +32,6 @@ public class BlocksHandler {
 
         colliderBlockColliderPort = new ColliderBlockColliderPort(Names.unlocalisedColliderBlockColliderPort);
         GameRegistry.registerBlock(colliderBlockColliderPort, ItemBlockColliderBlockColliderPort.class, Names.unlocalisedColliderBlockColliderPort);
-
-
-        extractorBlock = new ExtractorBlock(Names.unlocalisedExtractorBlock);
-        GameRegistry.registerBlock(extractorBlock, Names.unlocalisedExtractorBlock);
-
-        extractorBlockGlass = new ExtractorBlockGlass(Names.unlocalisedExtractorBlockGlass);
-        GameRegistry.registerBlock(extractorBlockGlass, Names.unlocalisedExtractorBlockGlass);
-
-        extractorBlockController = new ExtractorBlockController(Names.unlocalisedExtractorBlockController);
-        GameRegistry.registerBlock(extractorBlockController, Names.unlocalisedExtractorBlockController);
-
-        extractorBlockEnergyPort = new ExtractorBlockController(Names.unlocalisedExtractorBlockEnergyPort);
-        GameRegistry.registerBlock(extractorBlockEnergyPort, Names.unlocalisedExtractorBlockEnergyPort);
-
-        extractorBlockDisplacementPort = new ExtractorBlockDisplacementPort(Names.unlocalisedExtractorBlockDisplacementPort);
-        GameRegistry.registerBlock(extractorBlockDisplacementPort, Names.unlocalisedExtractorBlockDisplacementPort);
-
 
         blockRedstonePort = new BlockRedstonePort(Names.unlocalisedblockRedstonePort);
         GameRegistry.registerBlock(blockRedstonePort, ItemBlockRedstonePort.class, Names.unlocalisedblockRedstonePort);

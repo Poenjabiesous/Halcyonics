@@ -2,10 +2,12 @@ package halcyonics.blocks;
 
 import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
 import halcyonics.tileEntity.ColliderBlockColliderPortTileEntity;
-import net.minecraft.block.BlockEndPortal;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by Niel on 3/21/2016.
@@ -25,6 +27,10 @@ public class ColliderBlockColliderPort extends AbstractMultiBlockTileEntityConta
             return true;
         }
         return false;
+    }
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+      return true;
     }
 
 

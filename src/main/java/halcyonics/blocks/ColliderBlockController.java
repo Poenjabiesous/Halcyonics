@@ -1,6 +1,7 @@
 package halcyonics.blocks;
 
 
+import halcyonics.Halcyonics;
 import halcyonics.multiblock.AbstractMultiBlockTileEntityContainer;
 import halcyonics.tileEntity.ColliderBlockControllerTileEntity;
 import net.minecraft.block.state.IBlockState;
@@ -38,18 +39,13 @@ public class ColliderBlockController extends AbstractMultiBlockTileEntityContain
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) {
-            return true;
-        }
 
         if (((MultiBlockEnum.EnumType) state.getValue(STRUCTURE)).getID() == 0) {
-            playerIn.addChatComponentMessage(new ChatComponentText("Last structure error: " + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getReactor().getLastErrorMessage()));
+            if (worldIn.isRemote) {
+                playerIn.addChatComponentMessage(new ChatComponentText("Last structure error: " + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getReactor().getLastErrorMessage()));
+            }
         } else {
-            playerIn.addChatComponentMessage(new ChatComponentText("---Collider Overview---"));
-            playerIn.addChatComponentMessage(new ChatComponentText(""));
-            playerIn.addChatComponentMessage(new ChatComponentText("Energy: " + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getEnergyStored() + "/" + ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).getMaxEnergyStored()));
-            playerIn.addChatComponentMessage(new ChatComponentText(""));
-
+            playerIn.openGui(Halcyonics.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }
@@ -57,9 +53,8 @@ public class ColliderBlockController extends AbstractMultiBlockTileEntityContain
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 
-        if(worldIn.getTileEntity(pos) instanceof ColliderBlockControllerTileEntity)
-        {
-            ((ColliderBlockControllerTileEntity)worldIn.getTileEntity(pos)).deconstructMultiBlock();
+        if (worldIn.getTileEntity(pos) instanceof ColliderBlockControllerTileEntity) {
+            ((ColliderBlockControllerTileEntity) worldIn.getTileEntity(pos)).deconstructMultiBlock();
         }
         super.breakBlock(worldIn, pos, state);
     }

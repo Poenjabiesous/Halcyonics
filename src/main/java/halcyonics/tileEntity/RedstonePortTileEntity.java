@@ -5,7 +5,11 @@ package halcyonics.tileEntity;
  */
 public class RedstonePortTileEntity extends SlaveMultiBlockTileEntity {
 
-    public RedstonePortTileEntity() {
+    @Override
+    public void operate() {
+        if (worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0) {
+            this.getMaster().setIsReceivingRedstonePower(true);
+            return;
+        }
     }
-
 }

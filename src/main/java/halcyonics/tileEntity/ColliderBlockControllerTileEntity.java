@@ -7,6 +7,7 @@ import cofh.api.energy.IEnergyStorage;
 import halcyonics.util.MultiBlockStructureUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -23,6 +24,7 @@ import halcyonics.handler.ConfigHandler;
 import halcyonics.fx.FXAuraBeamEntity;
 import halcyonics.fx.FXColliderCoreEntity;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 
 /**
@@ -31,40 +33,74 @@ import java.util.Random;
 public class ColliderBlockControllerTileEntity extends TileEntity implements ITickable, IEnergyStorage {
 
 
-
-    public boolean isActive;
-
-    private int currentPowerGeneration = 0;
+    private boolean isReceivingRedstonePower;
+    private boolean isActive;
     private int currentColliders = 0;
     private EnergyStorage storage;
     private Random random;
     private boolean isStructureSet;
     private MultiBlockStructureDTO reactor;
 
-    public ColliderBlockControllerTileEntity() {
+    private int amountAer;
+    private int amountAqua;
+    private int amountTerra;
+    private int amountOrdo;
+    private int amountIgnis;
+    private int amountPerditio;
 
+    private int currentPowerGeneration;
+    private double stabilityPercentage;
+    private double efficiencyPercentage;
+
+    private int maxAura;
+
+    public ColliderBlockControllerTileEntity() {
         reactor = new MultiBlockStructureDTO();
         isStructureSet = false;
         random = new Random();
-        storage = new EnergyStorage(ConfigHandler.getAuraicColliderMaxStorage(), ConfigHandler.getAuraicColliderMaxStorage(), ConfigHandler.getAuraicColliderMaxStorage());
+        storage = new EnergyStorage(0);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        this.currentPowerGeneration = compound.getInteger("currentPowerGeneration");
         this.currentColliders = compound.getInteger("currentColliders");
-        this.isActive = compound.getBoolean("isActive");
+        this.isReceivingRedstonePower = compound.getBoolean("isReceivingRedstonePower");
+        this.isReceivingRedstonePower = compound.getBoolean("isActive");
         this.storage.setEnergyStored(compound.getInteger("energyStored"));
+
+        this.amountAer = compound.getInteger("amountAer");
+        this.amountAqua = compound.getInteger("amountAqua");
+        this.amountTerra = compound.getInteger("amountTerra");
+        this.amountOrdo = compound.getInteger("amountOrdo");
+        this.amountIgnis = compound.getInteger("amountIgnis");
+        this.amountPerditio = compound.getInteger("amountPerditio");
+        this.maxAura = compound.getInteger("maxAura");
+
+        this.currentPowerGeneration = compound.getInteger("currentPowerGeneration");
+        this.stabilityPercentage = compound.getDouble("stabilityPercentage");
+        this.efficiencyPercentage = compound.getDouble("efficiencyPercentage");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setInteger("currentPowerGeneration", this.currentPowerGeneration);
         compound.setInteger("currentColliders", this.currentColliders);
         compound.setInteger("currentEnergyStored", this.getEnergyStored());
+        compound.setBoolean("isReceivingRedstonePower", this.isReceivingRedstonePower);
         compound.setBoolean("isActive", this.isActive);
+
+        compound.setInteger("amountAer", amountAer);
+        compound.setInteger("amountAqua", amountAqua);
+        compound.setInteger("amountTerra", amountTerra);
+        compound.setInteger("amountOrdo", amountOrdo);
+        compound.setInteger("amountIgnis", amountIgnis);
+        compound.setInteger("amountPerditio", amountPerditio);
+        compound.setInteger("maxAura", maxAura);
+
+        compound.setInteger("currentPowerGeneration", currentPowerGeneration);
+        compound.setDouble("stabilityPercentage", stabilityPercentage);
+        compound.setDouble("efficiencyPercentage", efficiencyPercentage);
     }
 
     @Override
@@ -80,15 +116,139 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
         this.readFromNBT(pkt.getNbtCompound());
     }
 
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return (oldState.getBlock() != newSate.getBlock());
-    }
 
     @Override
     public void update() {
 
-        //Don't calculate structure again.
+        structureChecks();
+
+        if (worldObj.isRemote) {
+            return;
+        }
+
+        if (!isStructureSet) {
+            this.isActive = false;
+            return;
+        }
+
+        //redstone checks
+        for (TileEntity tile : reactor.getWorkingStructureBlocks().values()) {
+            if (tile instanceof RedstonePortTileEntity) {
+                ((SlaveMultiBlockTileEntity) tile).operate();
+                if (this.isReceivingRedstonePower()) {
+                    this.isActive = false;
+                    return;
+                }
+            }
+        }
+
+        this.setIsReceivingRedstonePower(false);
+
+        //Aura checks
+
+        if (AuraHelper.shouldPreserveAura(getWorld(), null, getPos(), Aspect.AIR)) {
+            this.isActive = false;
+            return;
+        }
+
+        if (AuraHelper.shouldPreserveAura(getWorld(), null, getPos(), Aspect.WATER)) {
+            this.isActive = false;
+            return;
+        }
+
+        if (AuraHelper.shouldPreserveAura(getWorld(), null, getPos(), Aspect.FIRE)) {
+            this.isActive = false;
+            return;
+        }
+
+        if (AuraHelper.shouldPreserveAura(getWorld(), null, getPos(), Aspect.ENTROPY)) {
+            this.isActive = false;
+            return;
+        }
+
+        if (AuraHelper.shouldPreserveAura(getWorld(), null, getPos(), Aspect.ORDER)) {
+            this.isActive = false;
+            return;
+        }
+
+        if (AuraHelper.shouldPreserveAura(getWorld(), null, getPos(), Aspect.EARTH)) {
+            this.isActive = false;
+            return;
+        }
+
+        this.isActive = true;
+        this.maxAura = AuraHelper.getAuraBase(worldObj, getPos());
+        this.amountAer = AuraHelper.getAura(worldObj, getPos(), Aspect.AIR);
+        this.amountAqua = AuraHelper.getAura(worldObj, getPos(), Aspect.WATER);
+        this.amountIgnis = AuraHelper.getAura(worldObj, getPos(), Aspect.FIRE);
+        this.amountPerditio = AuraHelper.getAura(worldObj, getPos(), Aspect.ENTROPY);
+        this.amountOrdo = AuraHelper.getAura(worldObj, getPos(), Aspect.ORDER);
+        this.amountTerra = AuraHelper.getAura(worldObj, getPos(), Aspect.EARTH);
+
+        this.currentPowerGeneration = 0;
+        this.currentColliders = 0;
+
+
+        for (TileEntity tile : reactor.getWorkingStructureBlocks().values()) {
+            if (tile instanceof ColliderBlockColliderPortTileEntity) {
+                ((ColliderBlockColliderPortTileEntity) tile).operate();
+                currentColliders++;
+            }
+        }
+
+        int maxVisAllowed = ConfigHandler.getAuraicColliderMaxVisPerAccelerator() * currentColliders;
+
+        //Baselines
+        double baselineEnergyGenMultiplier = (Math.min(amountIgnis, maxVisAllowed) * Math.min(amountPerditio, maxVisAllowed)) / (1.0F + (0.1F * currentColliders));
+        double baselineStability = (Math.min(amountOrdo, maxVisAllowed) * Math.min(amountTerra, maxVisAllowed)) / (1.0F + (0.1F * currentColliders));
+        double baselineEfficiency = (Math.min(amountAqua, maxVisAllowed) * Math.min(amountAer, maxVisAllowed)) / (1.0F + (0.1F * currentColliders));
+
+        //Collider Stability
+        stabilityPercentage = (baselineStability / baselineEnergyGenMultiplier) * 100F;
+        if (stabilityPercentage > 100F) {
+            stabilityPercentage = roundTwoDecimals(100F);
+        } else {
+            stabilityPercentage = roundTwoDecimals(stabilityPercentage);
+        }
+
+        //Collider Efficiency
+        efficiencyPercentage = (baselineEfficiency / baselineEnergyGenMultiplier) * 100F;
+        if (efficiencyPercentage > 100F) {
+            efficiencyPercentage = roundTwoDecimals(100F);
+        } else {
+            efficiencyPercentage = roundTwoDecimals(efficiencyPercentage);
+        }
+
+        currentPowerGeneration = (int) Math.floor(baselineEnergyGenMultiplier * (currentColliders * ConfigHandler.getAuraicColliderRFPerOperation()));
+
+        if (getWorld().getWorldTime() % 20 == 0 && (1 + random.nextInt(120)) > stabilityPercentage) {
+
+            switch (random.nextInt(6)) {
+                case (0):
+                    AuraHelper.drainAura(getWorld(), getPos(), Aspect.AIR, 1);
+                    break;
+                case (1):
+                    AuraHelper.drainAura(getWorld(), getPos(), Aspect.WATER, 1);
+                    break;
+                case (2):
+                    AuraHelper.drainAura(getWorld(), getPos(), Aspect.FIRE, 1);
+                    break;
+                case (3):
+                    AuraHelper.drainAura(getWorld(), getPos(), Aspect.ORDER, 1);
+                    break;
+                case (4):
+                    AuraHelper.drainAura(getWorld(), getPos(), Aspect.ENTROPY, 1);
+                    break;
+                case (5):
+                    AuraHelper.drainAura(getWorld(), getPos(), Aspect.EARTH, 1);
+                    break;
+            }
+        }
+    }
+
+
+    private void structureChecks() {
+
         if (isStructureSet) {
             reactor = MultiBlockStructureUtil.checkMadeStructure(getWorld(), reactor);
         } else {
@@ -108,10 +268,6 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
                 //Sync first
                 worldObj.markBlockForUpdate(getPos());
 
-                this.currentPowerGeneration = 0;
-                this.currentColliders = 0;
-
-
                 //Deconstruct the reactor if a block is missing.
                 if (!reactor.isStructureCorrect() && isStructureSet) {
                     deconstructMultiBlock();
@@ -123,24 +279,6 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
                     constructMultiBlock();
                 }
             }
-
-            if (!isStructureSet) {
-                return;
-            }
-
-            //get amount of colliders and check for redstone signal on redstone ports.
-            for (TileEntity tile : reactor.getWorkingStructureBlocks().values()) {
-                if (tile instanceof ColliderBlockColliderPortTileEntity) {
-                    this.currentColliders++;
-                }
-
-                if (tile instanceof RedstonePortTileEntity && worldObj.isBlockIndirectlyGettingPowered(tile.getPos()) > 0) {
-                    this.isActive = false;
-                    return;
-                }
-            }
-
-            this.isActive = true;
         }
     }
 
@@ -149,7 +287,7 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
             MultiBlockStructureUtil.setReactorStructureInactive(getWorld(), reactor);
             this.reactor.invalidateStructure();
             this.isStructureSet = false;
-            this.isActive = false;
+            this.isReceivingRedstonePower = false;
         }
     }
 
@@ -160,23 +298,11 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
         }
     }
 
-    public double getOfferedIC2Energy() {
 
-        if (this.getEnergyStored() >= this.storage.getMaxExtract()) {
-            return (this.storage.getMaxExtract() / ConfigHandler.getEuPowerConversionRatio());
-        }
-
-        return (this.getEnergyStored() / ConfigHandler.getEuPowerConversionRatio());
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        return (oldState.getBlock() != newState.getBlock());
     }
-
-    public BlockPos getReactorMiddle() {
-        return new BlockPos((reactor.getMinPos().getX() + reactor.getMaxPos().getX()) / 2, (reactor.getMinPos().getY() + reactor.getMaxPos().getY()) / 2, (reactor.getMinPos().getZ() + reactor.getMaxPos().getZ()) / 2);
-    }
-
-    public MultiBlockStructureDTO getReactor() {
-        return reactor;
-    }
-
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -185,7 +311,7 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        return this.storage.extractEnergy(maxExtract, simulate);
+        return Math.min((int) Math.floor(currentPowerGeneration * (efficiencyPercentage / 100F)), maxExtract);
     }
 
     @Override
@@ -204,5 +330,84 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public boolean isReceivingRedstonePower() {
+        return isReceivingRedstonePower;
+    }
+
+    public void setIsReceivingRedstonePower(boolean isReceivingRedstonePower) {
+        this.isReceivingRedstonePower = isReceivingRedstonePower;
+    }
+
+    public BlockPos getReactorMiddle() {
+        return new BlockPos((reactor.getMinPos().getX() + reactor.getMaxPos().getX()) / 2, (reactor.getMinPos().getY() + reactor.getMaxPos().getY()) / 2, (reactor.getMinPos().getZ() + reactor.getMaxPos().getZ()) / 2);
+    }
+
+    public MultiBlockStructureDTO getReactor() {
+        return reactor;
+    }
+
+    double roundTwoDecimals(double d) {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
+    }
+
+    public EnergyStorage getStorage() {
+        return storage;
+    }
+
+    public boolean isStructureSet() {
+        return isStructureSet;
+    }
+
+    public int getAmountAer() {
+        return amountAer;
+    }
+
+    public int getAmountAqua() {
+        return amountAqua;
+    }
+
+    public int getAmountTerra() {
+        return amountTerra;
+    }
+
+    public int getAmountOrdo() {
+        return amountOrdo;
+    }
+
+    public int getAmountIgnis() {
+        return amountIgnis;
+    }
+
+    public int getAmountPerditio() {
+        return amountPerditio;
+    }
+
+    public int getCurrentPowerGeneration() {
+        return currentPowerGeneration;
+    }
+
+    public double getStabilityPercentage() {
+        return stabilityPercentage;
+    }
+
+    public double getEfficiencyPercentage() {
+        return efficiencyPercentage;
+    }
+
+    public int getMaxAura() {
+        return maxAura;
+    }
+
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return worldObj.getTileEntity(getPos()) == this && player.getDistanceSq(getPos().getX() + 0.5,
+                getPos().getY() + 0.5,
+                getPos().getZ() + 0.5) < 64;
     }
 }

@@ -43,13 +43,13 @@ public class MultiBlockStructureUtil {
 
         if (size.getX() < minSize.getX() - 1 || size.getY() < minSize.getY() - 1 || size.getZ() < minSize.getZ() - 1) {
             structureDTO.setStructureCorrect(false);
-            structureDTO.setLastErrorMessage("Reactor too small");
+            structureDTO.setLastErrorMessage("Reactor structure is too small.");
             return structureDTO;
         }
 
         if (size.getX() > maxSize.getX() + 1 || size.getY() > maxSize.getY() + 1 || size.getZ() > maxSize.getZ() + 1) {
             structureDTO.setStructureCorrect(false);
-            structureDTO.setLastErrorMessage("Reactor too large");
+            structureDTO.setLastErrorMessage("Reactor structure is too big.");
             return structureDTO;
         }
 

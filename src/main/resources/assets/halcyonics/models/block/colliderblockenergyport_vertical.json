@@ -1,0 +1,11 @@
+{
+  "parent":"block/cube_all",
+  "textures": {
+    "north": "halcyonics:blocks/common/structureblock_unformed",
+    "south": "halcyonics:blocks/common/structureblock_unformed",
+    "east": "halcyonics:blocks/common/structureblock_unformed",
+    "west": "halcyonics:blocks/common/structureblock_unformed",
+    "up": "halcyonics:blocks/common/energyoutput_formed",
+    "down": "halcyonics:blocks/common/energyoutput_formed"
+  }
+}

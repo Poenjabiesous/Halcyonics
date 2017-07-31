@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "orientation=unformed,structure=unformed": {
+      "model": "halcyonics:blockredstoneport_unformed"
+    },
+    "orientation=stop,structure=unformed": {
+      "model": "halcyonics:blockredstoneport_unformed"
+    },
+    "orientation=horizontalx,structure=unformed": {
+      "model": "halcyonics:blockredstoneport_unformed"
+    },
+    "orientation=horizontalz,structure=unformed": {
+      "model": "halcyonics:blockredstoneport_unformed"
+    },
+    "orientation=vertical,structure=unformed": {
+      "model": "halcyonics:blockredstoneport_unformed"
+    },
+    "orientation=unformed,structure=formed": {
+      "model": "halcyonics:blockredstoneport_formed"
+    },
+    "orientation=stop,structure=formed": {
+      "model": "halcyonics:blockredstoneport_stop"
+    },
+    "orientation=horizontalx,structure=formed": {
+      "model": "halcyonics:blockredstoneport_horizontalx"
+    },
+    "orientation=horizontalz,structure=formed": {
+      "model": "halcyonics:blockredstoneport_horizontalz"
+    },
+    "orientation=vertical,structure=formed": {
+      "model": "halcyonics:blockredstoneport_vertical"
+    }
+  }
+}

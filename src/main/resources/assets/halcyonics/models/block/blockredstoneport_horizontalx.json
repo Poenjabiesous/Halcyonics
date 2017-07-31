@@ -1,0 +1,11 @@
+{
+  "parent":"block/cube_all",
+  "textures": {
+    "north": "halcyonics:blocks/common/redstoneport_formed",
+    "south": "halcyonics:blocks/common/redstoneport_formed",
+    "east": "halcyonics:blocks/common/structureblock_unformed",
+    "west": "halcyonics:blocks/common/structureblock_unformed",
+    "up": "halcyonics:blocks/common/structureblock_unformed",
+    "down": "halcyonics:blocks/common/structureblock_unformed"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "orientation=unformed,structure=unformed": {
+      "model": "halcyonics:colliderblockenergyport_unformed"
+    },
+    "orientation=stop,structure=unformed": {
+      "model": "halcyonics:colliderblockenergyport_unformed"
+    },
+    "orientation=horizontalx,structure=unformed": {
+      "model": "halcyonics:colliderblockenergyport_unformed"
+    },
+    "orientation=horizontalz,structure=unformed": {
+      "model": "halcyonics:colliderblockenergyport_unformed"
+    },
+    "orientation=vertical,structure=unformed": {
+      "model": "halcyonics:colliderblockenergyport_unformed"
+    },
+    "orientation=unformed,structure=formed": {
+      "model": "halcyonics:colliderblockenergyport_formed"
+    },
+    "orientation=stop,structure=formed": {
+      "model": "halcyonics:colliderblockenergyport_stop"
+    },
+    "orientation=horizontalx,structure=formed": {
+      "model": "halcyonics:colliderblockenergyport_horizontalx"
+    },
+    "orientation=horizontalz,structure=formed": {
+      "model": "halcyonics:colliderblockenergyport_horizontalz"
+    },
+    "orientation=vertical,structure=formed": {
+      "model": "halcyonics:colliderblockenergyport_vertical"
+    }
+  }
+}

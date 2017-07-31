@@ -1,0 +1,29 @@
+itemGroup.Halcyonics=Halcyonics
+
+tile.colliderblock.name=Auraic Collider Block
+tile.colliderblockglass.name=Auraic Collider Glass Block
+tile.colliderblockcontroller.name=Auraic Collider Controller Block
+tile.colliderblockenergyport.name=Auraic Collider Energy Port
+tile.colliderblockcolliderport.name=Auraic Collider Vis Accelerator
+tile.colliderblockredstoneport.name=Auraic Collider Redstone Port
+
+structure.maxsize=Structure max size:
+structure.minsize=Structure min size:
+
+block.info=Block Info:
+
+colliderblock.info=General building block of the Auraic Collider multiblock structure.
+colliderblockglass.info=General building block of the Auraic Collider multiblock structure.
+colliderblockcontroller.info=Controller of the Auraic Collider multiblock structure.
+colliderblockenergyport.info=Used to extract RF/EU out of the Auraic Collider.
+colliderblockcolliderport.info.1=Each of these blocks in the Auraic Collider multiblock structure
+colliderblockcolliderport.info.2=adds power generation per tick, at the cost of vis.
+colliderblockredstoneport.info=Used to turn the Auraic Collider on/off with a redstone signal.
+
+block.usablility=Block Usability
+
+block.usable.frame=Multiblock Frame:
+block.usable.panel=Multiblock Panel:
+
+block.usable.yes=Yes
+block.usable.no=No

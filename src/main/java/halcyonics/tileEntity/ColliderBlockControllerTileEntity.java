@@ -196,6 +196,11 @@ public class ColliderBlockControllerTileEntity extends TileEntity implements ITi
             }
         }
 
+        if(currentColliders == 0)
+        {
+            return;
+        }
+
         int maxVisAllowed = ConfigHandler.getAuraicColliderMaxVisPerAccelerator() * currentColliders;
 
         //Baselines

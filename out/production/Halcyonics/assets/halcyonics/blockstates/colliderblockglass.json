@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "structure=unformed": { "model":"halcyonics:colliderblockglass_unformed" },
-    "structure=formed": { "model":"halcyonics:colliderblockglass_formed" }
-  }
-}

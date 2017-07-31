@@ -1,6 +1,0 @@
-{
-  "parent":"block/cube_all",
-  "textures": {
-    "all": "halcyonics:blocks/common/energyoutput_unformed"
-  }
-}
